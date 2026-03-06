@@ -8,24 +8,25 @@
 
 body{
 font-family:Arial;
-background:linear-gradient(135deg,#6a11cb,#2575fc);
+background:linear-gradient(45deg,#6a11cb,#2575fc);
 display:flex;
 justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
+padding:40px;
 }
 
 .container{
 background:white;
-padding:20px;
-border-radius:12px;
-width:350px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+padding:25px;
+width:340px;
+border-radius:15px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+h2{
 text-align:center;
 }
 
-input,select{
+input,select,button{
 width:100%;
 padding:10px;
 margin-top:10px;
@@ -36,30 +37,26 @@ border:1px solid #ccc;
 button{
 background:#7b2ff7;
 color:white;
-padding:12px;
 border:none;
-border-radius:8px;
-width:100%;
-font-size:16px;
-margin-top:10px;
-cursor:pointer;
+font-weight:bold;
 }
 
 button:hover{
-background:#5f1fd6;
+background:#5f1edb;
 }
 
-video{
+video,iframe{
 width:100%;
 margin-top:15px;
 border-radius:10px;
 }
 
 .subtitle{
-margin-top:10px;
-background:#f2f2f2;
+background:#eee;
 padding:10px;
+margin-top:10px;
 border-radius:8px;
+text-align:center;
 }
 
 </style>
@@ -73,19 +70,17 @@ border-radius:8px;
 
 <input id="youtubeLink" placeholder="Paste YouTube Link">
 
-<select id="sourceLang">
+<select>
 <option>Auto Detect</option>
 <option>English</option>
-<option>Thai</option>
-<option>Myanmar</option>
 <option>Chinese</option>
+<option>Thai</option>
 </select>
 
-<select id="targetLang">
+<select>
 <option>Myanmar</option>
 <option>English</option>
 <option>Thai</option>
-<option>Chinese</option>
 </select>
 
 <select>
@@ -96,23 +91,21 @@ border-radius:8px;
 
 <button onclick="translateVideo()">Translate Video</button>
 
-<br><br>
-
-<h4>Upload Media</h4>
-
-<input type="file" id="videoUpload" accept="video/*">
-
-<button onclick="uploadVideo()">Upload Video</button>
-
 <div id="videoBox"></div>
 
-<div class="subtitle" id="subtitleBox">
+<div id="subtitleBox" class="subtitle">
 AI Subtitle will appear here
 </div>
 
 <button onclick="downloadVideo()">Download Video</button>
 
 <button onclick="movieRecap()">Movie Recap AI</button>
+
+<h3>Upload Media</h3>
+
+<input type="file" id="videoUpload">
+
+<button onclick="uploadVideo()">Upload Video</button>
 
 </div>
 
@@ -127,20 +120,23 @@ alert("Paste YouTube Link")
 return
 }
 
-let videoId=link.split("v=")[1]
+let id=""
 
-if(link.includes("shorts")){
-videoId=link.split("shorts/")[1]
+if(link.includes("watch?v=")){
+id=link.split("v=")[1]
 }
 
-let embed="https://www.youtube.com/embed/"+videoId
+if(link.includes("shorts/")){
+id=link.split("shorts/")[1]
+}
+
+let embed="https://www.youtube.com/embed/"+id
 
 document.getElementById("videoBox").innerHTML=
-
-'<iframe width="100%" height="200" src="'+embed+'" frameborder="0" allowfullscreen></iframe>'
+'<iframe src="'+embed+'" frameborder="0" allowfullscreen></iframe>'
 
 document.getElementById("subtitleBox").innerHTML=
-"AI Subtitle (Myanmar): This is AI generated subtitle demo."
+"AI Myanmar Subtitle: ဒီဗီဒီယိုမှာ လူတစ်ယောက် ပြန်လာတာကို မေးနေပါတယ်။"
 
 }
 
@@ -149,7 +145,7 @@ function uploadVideo(){
 let file=document.getElementById("videoUpload").files[0]
 
 if(!file){
-alert("Select Video First")
+alert("Choose Video")
 return
 }
 
@@ -159,20 +155,17 @@ document.getElementById("videoBox").innerHTML=
 '<video controls src="'+url+'"></video>'
 
 document.getElementById("subtitleBox").innerHTML=
-"AI Subtitle Generated from uploaded video (Demo)."
+"AI Subtitle Generated from Uploaded Video"
 
 }
 
 function downloadVideo(){
-
-alert("Video Download Feature Demo")
-
+alert("Download feature coming soon")
 }
 
 function movieRecap(){
-
-alert("Movie Recap AI: This video is about soldiers on a mission.")
-
+document.getElementById("subtitleBox").innerHTML=
+"Movie Recap: ဒီဇာတ်ကားမှာ လူတစ်ယောက်အိမ်ထဲမှာနားနေတဲ့အချိန် သူ့ကိုတစ်ယောက်လာတွေ့ပါတယ်။"
 }
 
 </script>
