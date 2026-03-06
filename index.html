@@ -1,62 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Video Translator</title>
 
 <style>
 
 body{
-font-family: Arial;
-background:#f5f5f5;
+font-family:Arial;
+background:#f2f2f2;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
 }
 
-.container{
+.box{
 background:white;
-padding:30px;
+padding:25px;
 border-radius:10px;
 width:350px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
 text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
 
-h1{
-margin-bottom:20px;
-}
-
-input,select{
+input,select,button{
 width:100%;
 padding:10px;
-margin:10px 0;
+margin:8px 0;
 border-radius:5px;
 border:1px solid #ccc;
 }
 
 button{
-width:100%;
-padding:12px;
-background:#4CAF50;
+background:purple;
 color:white;
 border:none;
-border-radius:5px;
-font-size:16px;
-cursor:pointer;
-}
-
-button:hover{
-background:#45a049;
 }
 
 iframe{
 margin-top:20px;
 width:100%;
 height:200px;
-border:none;
 }
 
 </style>
@@ -65,49 +49,47 @@ border:none;
 
 <body>
 
-<div class="container">
+<div class="box">
 
-<h1>AI Video Translator</h1>
+<h2>AI Video Translator</h2>
 
-<input id="videoUrl" placeholder="Paste YouTube link">
+<input id="url" placeholder="Paste YouTube link">
 
-<select id="language">
-
-<option value="my">Myanmar</option>
-<option value="en">English</option>
-<option value="th">Thai</option>
-<option value="zh">Chinese</option>
-<option value="ja">Japanese</option>
-<option value="ko">Korean</option>
-
+<select id="lang">
+<option>Myanmar</option>
+<option>English</option>
+<option>Thai</option>
+<option>Chinese</option>
+<option>Japanese</option>
+<option>Korean</option>
 </select>
 
-<button onclick="translateVideo()">Translate Video</button>
+<button onclick="loadVideo()">Translate</button>
 
-<div id="player"></div>
+<div id="video"></div>
 
 </div>
 
 <script>
 
-function translateVideo(){
+function loadVideo(){
 
-let url = document.getElementById("videoUrl").value;
+let link = document.getElementById("url").value;
 
-if(url==""){
-alert("Paste YouTube link");
+if(link==""){
+alert("Paste video link");
 return;
 }
 
-let id = "";
+let id="";
 
-if(url.includes("shorts")){
-id = url.split("/shorts/")[1];
+if(link.includes("shorts")){
+id=link.split("/shorts/")[1];
 }else{
-id = url.split("v=")[1];
+id=link.split("v=")[1];
 }
 
-document.getElementById("player").innerHTML =
+document.getElementById("video").innerHTML=
 '<iframe src="https://www.youtube.com/embed/'+id+'"></iframe>';
 
 }
