@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Video Translator PRO</title>
 
 <style>
 
 body{
 font-family:Arial;
+background:linear-gradient(135deg,#6a11cb,#2575fc);
 margin:0;
-background:linear-gradient(135deg,#4f46e5,#9333ea);
+padding:0;
 }
 
 .container{
+width:90%;
 max-width:600px;
-margin:50px auto;
+margin:auto;
+margin-top:40px;
 background:white;
 padding:20px;
-border-radius:10px;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
+border-radius:12px;
 }
 
 h1{
@@ -28,39 +29,32 @@ text-align:center;
 
 input,select{
 width:100%;
-padding:10px;
-margin:10px 0;
-border-radius:5px;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
 border:1px solid #ccc;
 }
 
 button{
 width:100%;
-padding:12px;
-margin:8px 0;
+padding:14px;
+margin-top:10px;
 border:none;
-border-radius:6px;
-background:linear-gradient(90deg,#7c3aed,#6d28d9);
+border-radius:10px;
+background:linear-gradient(90deg,#8e2de2,#4a00e0);
 color:white;
 font-size:16px;
-cursor:pointer;
 }
 
-button:hover{
-opacity:0.9;
+.video-box{
+margin-top:20px;
 }
 
-#player{
-width:100%;
-height:315px;
-margin-top:10px;
-}
-
-.status{
+.subtitle{
 background:#eee;
-padding:10px;
-border-radius:6px;
-margin-top:10px;
+padding:15px;
+margin-top:15px;
+border-radius:8px;
 }
 
 </style>
@@ -72,100 +66,108 @@ margin-top:10px;
 
 <h1>AI Video Translator PRO</h1>
 
-<input id="youtubeUrl" placeholder="Paste YouTube URL">
+<input id="url" placeholder="Paste YouTube Video URL">
 
-<select id="sourceLang">
+<select>
+
 <option>Auto Detect</option>
 <option>English</option>
+<option>Myanmar</option>
 <option>Thai</option>
+<option>Chinese</option>
 <option>Japanese</option>
 <option>Korean</option>
-<option>Chinese</option>
+<option>Spanish</option>
+<option>French</option>
+<option>German</option>
+<option>Hindi</option>
+<option>Indonesian</option>
+<option>Malay</option>
+<option>Vietnamese</option>
+<option>Filipino</option>
+
 </select>
 
-<select id="targetLang">
+<select>
+
 <option>Myanmar</option>
 <option>English</option>
 <option>Thai</option>
+<option>Chinese</option>
 <option>Japanese</option>
 <option>Korean</option>
-<option>Chinese</option>
+<option>Spanish</option>
+<option>French</option>
+<option>German</option>
+<option>Hindi</option>
+<option>Indonesian</option>
+<option>Malay</option>
+<option>Vietnamese</option>
+<option>Filipino</option>
+
 </select>
 
-<select id="voice">
+<select>
+
 <option>AI Emotion Voice</option>
 <option>Male Voice</option>
 <option>Female Voice</option>
+
 </select>
 
 <button onclick="translateVideo()">Translate Video</button>
 
-<iframe id="player"></iframe>
+<div class="video-box">
 
-<div class="status" id="status">
-Waiting Video...
+<iframe
+id="player"
+width="100%"
+height="300"
+frameborder="0"
+allowfullscreen>
+</iframe>
+
 </div>
 
-<button onclick="downloadVideo()">Download Video</button>
+<div class="subtitle" id="subtitle">
 
-<button onclick="movieRecap()">Movie Recap AI</button>
+AI Subtitle will appear here...
+
+</div>
+
+<button>Download Video</button>
+
+<button>Movie Recap AI</button>
 
 <h3>Upload Media</h3>
 
-<input type="file" id="upload">
+<input type="file">
 
-<button onclick="uploadVideo()">Upload Video</button>
+<button>Upload Video</button>
 
 </div>
 
 <script>
 
-function getYoutubeID(url){
-let reg=/v=([^&]+)/;
-let match=url.match(reg);
-if(match){
-return match[1];
-}
-return null;
-}
-
 function translateVideo(){
 
-let url=document.getElementById("youtubeUrl").value;
+let url=document.getElementById("url").value
 
-let id=getYoutubeID(url);
+let id=""
 
-if(!id){
-alert("Invalid YouTube Link");
-return;
+if(url.includes("watch?v=")){
+id=url.split("watch?v=")[1]
+}
+
+if(url.includes("youtu.be/")){
+id=url.split("youtu.be/")[1]
 }
 
 document.getElementById("player").src=
-"https://www.youtube.com/embed/"+id;
+"https://www.youtube.com/embed/"+id
 
-document.getElementById("status").innerHTML=
-"AI Subtitle Generated Successfully";
-}
-
-function downloadVideo(){
-alert("Video Download Feature Coming Soon");
-}
-
-function movieRecap(){
-alert("Movie Recap AI Generating...");
-}
-
-function uploadVideo(){
-
-let file=document.getElementById("upload").files[0];
-
-if(!file){
-alert("Select Video First");
-return;
-}
-
-document.getElementById("status").innerHTML=
-"Video Uploaded: "+file.name;
+document.getElementById("subtitle").innerText=
+"AI Subtitle Generated Successfully"
 
 }
 
