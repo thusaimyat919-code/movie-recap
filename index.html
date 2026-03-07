@@ -8,7 +8,7 @@
 
 body{
 font-family:Arial;
-background:linear-gradient(135deg,#6a11cb,#2575fc);
+background:linear-gradient(135deg,#4facfe,#00f2fe);
 margin:0;
 padding:0;
 }
@@ -27,7 +27,7 @@ h1{
 text-align:center;
 }
 
-input,select{
+input,select,button{
 width:100%;
 padding:12px;
 margin-top:10px;
@@ -36,14 +36,10 @@ border:1px solid #ccc;
 }
 
 button{
-width:100%;
-padding:14px;
-margin-top:10px;
-border:none;
-border-radius:10px;
-background:linear-gradient(90deg,#8e2de2,#4a00e0);
+background:#4facfe;
 color:white;
 font-size:16px;
+border:none;
 }
 
 .video-box{
@@ -66,30 +62,9 @@ border-radius:8px;
 
 <h1>AI Video Translator PRO</h1>
 
-<input id="url" placeholder="Paste YouTube Video URL">
+<input id="url" placeholder="Paste YouTube / TikTok / Facebook Link">
 
-<select>
-
-<option>Auto Detect</option>
-<option>English</option>
-<option>Myanmar</option>
-<option>Thai</option>
-<option>Chinese</option>
-<option>Japanese</option>
-<option>Korean</option>
-<option>Spanish</option>
-<option>French</option>
-<option>German</option>
-<option>Hindi</option>
-<option>Indonesian</option>
-<option>Malay</option>
-<option>Vietnamese</option>
-<option>Filipino</option>
-
-</select>
-
-<select>
-
+<select id="lang">
 <option>Myanmar</option>
 <option>English</option>
 <option>Thai</option>
@@ -98,21 +73,6 @@ border-radius:8px;
 <option>Korean</option>
 <option>Spanish</option>
 <option>French</option>
-<option>German</option>
-<option>Hindi</option>
-<option>Indonesian</option>
-<option>Malay</option>
-<option>Vietnamese</option>
-<option>Filipino</option>
-
-</select>
-
-<select>
-
-<option>AI Emotion Voice</option>
-<option>Male Voice</option>
-<option>Female Voice</option>
-
 </select>
 
 <button onclick="translateVideo()">Translate Video</button>
@@ -130,29 +90,38 @@ allowfullscreen>
 </div>
 
 <div class="subtitle" id="subtitle">
-
-AI Subtitle will appear here...
-
+AI subtitle will appear here...
 </div>
-
-<button>Download Video</button>
-
-<button>Movie Recap AI</button>
-
-<h3>Upload Media</h3>
-
-<input type="file">
-
-<button>Upload Video</button>
 
 </div>
 
 <script>
 
-function translateVideo(){
+const API_KEY="YOUR_API_KEY"
+
+async function aiTranslate(text){
+
+let res = await fetch("https://api.openai.com/v1/responses",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+API_KEY
+},
+body:JSON.stringify({
+model:"gpt-5-nano",
+input:"Translate to Myanmar: "+text
+})
+})
+
+let data = await res.json()
+
+return data.output[0].content[0].text
+
+}
+
+async function translateVideo(){
 
 let url=document.getElementById("url").value
-
 let id=""
 
 if(url.includes("watch?v=")){
@@ -166,8 +135,11 @@ id=url.split("youtu.be/")[1]
 document.getElementById("player").src=
 "https://www.youtube.com/embed/"+id
 
-document.getElementById("subtitle").innerText=
-"AI Subtitle Generated Successfully"
+let text="This video is about technology and education."
+
+let translated=await aiTranslate(text)
+
+document.getElementById("subtitle").innerHTML=translated
 
 }
 
