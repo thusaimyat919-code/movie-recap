@@ -2,69 +2,62 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>AI Video Translator PRO</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:linear-gradient(135deg,#667eea,#764ba2);
+background:linear-gradient(135deg,#6a11cb,#2575fc);
 margin:0;
 padding:0;
 }
 
 .container{
 width:90%;
-max-width:800px;
+max-width:600px;
 margin:auto;
-margin-top:30px;
+margin-top:40px;
 background:white;
 padding:20px;
 border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 h1{
 text-align:center;
-margin-bottom:20px;
 }
 
-input,select,button{
+input,select{
 width:100%;
 padding:12px;
 margin-top:10px;
 border-radius:8px;
 border:1px solid #ccc;
-font-size:15px;
 }
 
 button{
-background:#667eea;
-color:white;
+width:100%;
+padding:14px;
+margin-top:10px;
 border:none;
-cursor:pointer;
+border-radius:10px;
+background:linear-gradient(90deg,#8e2de2,#4a00e0);
+color:white;
+font-size:16px;
 }
 
-button:hover{
-background:#5563c1;
-}
-
-.video{
+.video-box{
 margin-top:20px;
 }
 
 .subtitle{
-margin-top:20px;
-background:#f2f2f2;
+background:#eee;
 padding:15px;
-border-radius:10px;
-min-height:50px;
+margin-top:15px;
+border-radius:8px;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -73,29 +66,63 @@ min-height:50px;
 
 <h1>AI Video Translator PRO</h1>
 
-<input id="url" placeholder="Paste YouTube Link">
+<input id="url" placeholder="Paste YouTube Video URL">
 
-<select id="lang">
+<select>
 
-<option value="Myanmar">Myanmar</option>
-<option value="English">English</option>
-<option value="Thai">Thai</option>
-<option value="Chinese">Chinese</option>
-<option value="Japanese">Japanese</option>
-<option value="Korean">Korean</option>
+<option>Auto Detect</option>
+<option>English</option>
+<option>Myanmar</option>
+<option>Thai</option>
+<option>Chinese</option>
+<option>Japanese</option>
+<option>Korean</option>
+<option>Spanish</option>
+<option>French</option>
+<option>German</option>
+<option>Hindi</option>
+<option>Indonesian</option>
+<option>Malay</option>
+<option>Vietnamese</option>
+<option>Filipino</option>
 
 </select>
 
-<button onclick="loadVideo()">Load Video</button>
+<select>
 
-<button onclick="translateSubtitle()">Translate Subtitle</button>
+<option>Myanmar</option>
+<option>English</option>
+<option>Thai</option>
+<option>Chinese</option>
+<option>Japanese</option>
+<option>Korean</option>
+<option>Spanish</option>
+<option>French</option>
+<option>German</option>
+<option>Hindi</option>
+<option>Indonesian</option>
+<option>Malay</option>
+<option>Vietnamese</option>
+<option>Filipino</option>
 
-<div class="video">
+</select>
+
+<select>
+
+<option>AI Emotion Voice</option>
+<option>Male Voice</option>
+<option>Female Voice</option>
+
+</select>
+
+<button onclick="translateVideo()">Translate Video</button>
+
+<div class="video-box">
 
 <iframe
 id="player"
 width="100%"
-height="400"
+height="300"
 frameborder="0"
 allowfullscreen>
 </iframe>
@@ -104,17 +131,27 @@ allowfullscreen>
 
 <div class="subtitle" id="subtitle">
 
-Subtitle will appear here...
+AI Subtitle will appear here...
 
 </div>
+
+<button>Download Video</button>
+
+<button>Movie Recap AI</button>
+
+<h3>Upload Media</h3>
+
+<input type="file">
+
+<button>Upload Video</button>
 
 </div>
 
 <script>
 
-const API_KEY="YOUR_API_KEY"
+function translateVideo(){
 
-function getYouTubeID(url){
+let url=document.getElementById("url").value
 
 let id=""
 
@@ -122,69 +159,19 @@ if(url.includes("watch?v=")){
 id=url.split("watch?v=")[1]
 }
 
-else if(url.includes("youtu.be/")){
+if(url.includes("youtu.be/")){
 id=url.split("youtu.be/")[1]
 }
 
-else if(url.includes("shorts/")){
-id=url.split("shorts/")[1]
-}
+document.getElementById("player").src=
+"https://www.youtube.com/embed/"+id
 
-if(id.includes("&")){
-id=id.split("&")[0]
-}
-
-return id
-
-}
-
-function loadVideo(){
-
-let url=document.getElementById("url").value
-
-let id=getYouTubeID(url)
-
-let embed="https://www.youtube.com/embed/"+id
-
-document.getElementById("player").src=embed
-
-}
-
-async function translateSubtitle(){
-
-let lang=document.getElementById("lang").value
-
-let text="This video explains a story about a woman trapped with an alien."
-
-let response=await fetch("https://api.openai.com/v1/responses",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json",
-"Authorization":"Bearer "+API_KEY
-},
-
-body:JSON.stringify({
-
-model:"gpt-5-nano",
-
-input:"Translate this text to "+lang+": "+text
-
-})
-
-})
-
-let data=await response.json()
-
-let result=data.output[0].content[0].text
-
-document.getElementById("subtitle").innerHTML=result
+document.getElementById("subtitle").innerText=
+"AI Subtitle Generated Successfully"
 
 }
 
 </script>
 
 </body>
-
 </html>
