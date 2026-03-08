@@ -2,25 +2,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>AI Video Translator PRO</title>
+<title>AI Video Translator</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:linear-gradient(135deg,#4facfe,#00f2fe);
+background:linear-gradient(135deg,#667eea,#764ba2);
 margin:0;
 padding:0;
 }
 
 .container{
 width:90%;
-max-width:600px;
+max-width:700px;
 margin:auto;
 margin-top:40px;
 background:white;
 padding:20px;
 border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
 h1{
@@ -33,13 +34,18 @@ padding:12px;
 margin-top:10px;
 border-radius:8px;
 border:1px solid #ccc;
+font-size:15px;
 }
 
 button{
-background:#4facfe;
+background:#667eea;
 color:white;
-font-size:16px;
 border:none;
+cursor:pointer;
+}
+
+button:hover{
+background:#5563c1;
 }
 
 .video-box{
@@ -47,42 +53,43 @@ margin-top:20px;
 }
 
 .subtitle{
-background:#eee;
+margin-top:20px;
+background:#f1f1f1;
 padding:15px;
-margin-top:15px;
-border-radius:8px;
+border-radius:10px;
+font-size:16px;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>AI Video Translator PRO</h1>
+<h1>AI Video Translator</h1>
 
-<input id="url" placeholder="Paste YouTube / TikTok / Facebook Link">
+<input id="url" placeholder="Paste YouTube / TikTok / Facebook link">
 
 <select id="lang">
-<option>Myanmar</option>
-<option>English</option>
-<option>Thai</option>
-<option>Chinese</option>
-<option>Japanese</option>
-<option>Korean</option>
-<option>Spanish</option>
-<option>French</option>
+<option value="Myanmar">Myanmar</option>
+<option value="English">English</option>
+<option value="Thai">Thai</option>
+<option value="Chinese">Chinese</option>
+<option value="Japanese">Japanese</option>
+<option value="Korean">Korean</option>
 </select>
 
-<button onclick="translateVideo()">Translate Video</button>
+<button onclick="loadVideo()">Load Video</button>
+<button onclick="translateSubtitle()">Translate Subtitle</button>
 
 <div class="video-box">
 
 <iframe
 id="player"
 width="100%"
-height="300"
+height="350"
 frameborder="0"
 allowfullscreen>
 </iframe>
@@ -90,7 +97,7 @@ allowfullscreen>
 </div>
 
 <div class="subtitle" id="subtitle">
-AI subtitle will appear here...
+Subtitle will appear here...
 </div>
 
 </div>
@@ -99,29 +106,13 @@ AI subtitle will appear here...
 
 const API_KEY="YOUR_API_KEY"
 
-async function aiTranslate(text){
-
-let res = await fetch("https://api.openai.com/v1/responses",{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":"Bearer "+API_KEY
-},
-body:JSON.stringify({
-model:"gpt-5-nano",
-input:"Translate to Myanmar: "+text
-})
-})
-
-let data = await res.json()
-
-return data.output[0].content[0].text
-
-}
-
-async function translateVideo(){
+function loadVideo(){
 
 let url=document.getElementById("url").value
+let embed=""
+
+if(url.includes("youtube.com") || url.includes("youtu.be")){
+
 let id=""
 
 if(url.includes("watch?v=")){
@@ -132,14 +123,52 @@ if(url.includes("youtu.be/")){
 id=url.split("youtu.be/")[1]
 }
 
-document.getElementById("player").src=
-"https://www.youtube.com/embed/"+id
+embed="https://www.youtube.com/embed/"+id
 
-let text="This video is about technology and education."
+}
 
-let translated=await aiTranslate(text)
+else if(url.includes("tiktok")){
+embed=url
+}
 
-document.getElementById("subtitle").innerHTML=translated
+else if(url.includes("facebook")){
+embed=url
+}
+
+document.getElementById("player").src=embed
+
+}
+
+async function translateSubtitle(){
+
+let lang=document.getElementById("lang").value
+
+let text="This video is explaining technology and learning."
+
+let response=await fetch("https://api.openai.com/v1/responses",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+API_KEY
+},
+
+body:JSON.stringify({
+
+model:"gpt-5-nano",
+
+input:"Translate this to "+lang+": "+text
+
+})
+
+})
+
+let data=await response.json()
+
+let result=data.output[0].content[0].text
+
+document.getElementById("subtitle").innerHTML=result
 
 }
 
