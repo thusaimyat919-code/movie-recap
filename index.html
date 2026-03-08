@@ -2,7 +2,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>AI Video Translator</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>AI Video Translator PRO</title>
 
 <style>
 
@@ -15,17 +17,18 @@ padding:0;
 
 .container{
 width:90%;
-max-width:700px;
+max-width:800px;
 margin:auto;
-margin-top:40px;
+margin-top:30px;
 background:white;
 padding:20px;
 border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 h1{
 text-align:center;
+margin-bottom:20px;
 }
 
 input,select,button{
@@ -44,46 +47,55 @@ border:none;
 cursor:pointer;
 }
 
-.video-box{
+button:hover{
+background:#5563c1;
+}
+
+.video{
 margin-top:20px;
 }
 
 .subtitle{
 margin-top:20px;
-background:#f1f1f1;
+background:#f2f2f2;
 padding:15px;
 border-radius:10px;
+min-height:50px;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>AI Video Translator</h1>
+<h1>AI Video Translator PRO</h1>
 
 <input id="url" placeholder="Paste YouTube Link">
 
 <select id="lang">
+
 <option value="Myanmar">Myanmar</option>
 <option value="English">English</option>
 <option value="Thai">Thai</option>
 <option value="Chinese">Chinese</option>
 <option value="Japanese">Japanese</option>
 <option value="Korean">Korean</option>
+
 </select>
 
 <button onclick="loadVideo()">Load Video</button>
+
 <button onclick="translateSubtitle()">Translate Subtitle</button>
 
-<div class="video-box">
+<div class="video">
 
 <iframe
 id="player"
 width="100%"
-height="350"
+height="400"
 frameborder="0"
 allowfullscreen>
 </iframe>
@@ -91,7 +103,9 @@ allowfullscreen>
 </div>
 
 <div class="subtitle" id="subtitle">
+
 Subtitle will appear here...
+
 </div>
 
 </div>
@@ -100,9 +114,8 @@ Subtitle will appear here...
 
 const API_KEY="YOUR_API_KEY"
 
-function loadVideo(){
+function getYouTubeID(url){
 
-let url=document.getElementById("url").value
 let id=""
 
 if(url.includes("watch?v=")){
@@ -121,6 +134,16 @@ if(id.includes("&")){
 id=id.split("&")[0]
 }
 
+return id
+
+}
+
+function loadVideo(){
+
+let url=document.getElementById("url").value
+
+let id=getYouTubeID(url)
+
 let embed="https://www.youtube.com/embed/"+id
 
 document.getElementById("player").src=embed
@@ -131,7 +154,7 @@ async function translateSubtitle(){
 
 let lang=document.getElementById("lang").value
 
-let text="This video is explaining something interesting."
+let text="This video explains a story about a woman trapped with an alien."
 
 let response=await fetch("https://api.openai.com/v1/responses",{
 
@@ -143,8 +166,11 @@ headers:{
 },
 
 body:JSON.stringify({
+
 model:"gpt-5-nano",
-input:"Translate this to "+lang+": "+text
+
+input:"Translate this text to "+lang+": "+text
+
 })
 
 })
@@ -160,4 +186,5 @@ document.getElementById("subtitle").innerHTML=result
 </script>
 
 </body>
+
 </html>
